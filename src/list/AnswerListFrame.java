@@ -9,10 +9,10 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
-public class ListFrame extends JFrame {
+public class AnswerListFrame extends JFrame {
 
-    public ListFrame() {
-        JPanel p = new JPanel(new GridLayout(4,1));
+    public AnswerListFrame() {
+        JPanel p = new JPanel(new GridLayout(3,1));
 
         JPanel p1 = new JPanel();
         JTextArea t1 = new JTextArea(10,30);
@@ -34,7 +34,9 @@ public class ListFrame extends JFrame {
         setSize(400,500);
         setLocationRelativeTo(null);
 
-        JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel p2 = new JPanel(new GridLayout(2,1));
+
+        JPanel p2_1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         // 選択肢数
         JRadioButton[] radio = new JRadioButton[4];
         radio[0] = new JRadioButton("aaa");
@@ -42,31 +44,43 @@ public class ListFrame extends JFrame {
         radio[2] = new JRadioButton("ccc");
         radio[3] = new JRadioButton("ddd");
 
+        radio[2].setSelected(true);
+
         ButtonGroup bg = new ButtonGroup();
         bg.add(radio[0]);
         bg.add(radio[1]);
         bg.add(radio[2]);
         bg.add(radio[3]);
 
-        p2.add(radio[0]);
-        p2.add(radio[1]);
-        p2.add(radio[2]);
-        p2.add(radio[3]);
+        p2_1.add(radio[0]);
+        p2_1.add(radio[1]);
+        p2_1.add(radio[2]);
+        p2_1.add(radio[3]);
+
+        JPanel p2_2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel l1 = new JLabel("解答：aaa");
+        p2_2.add(l1);
+
+
+        p2.add(p2_1);
+        p2.add(p2_2);
+
+
+
         p.add(p2);
 
         JPanel p3 = new JPanel(new GridLayout(1,3));
         JButton b1 = new JButton("前");
         b1.setEnabled(false);
-        JButton b2 = new JButton("提出");
-//        b2.setEnabled(false);
+        JButton b2 = new JButton("一覧へ");
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "お疲れ様です。メイン画面に戻ります。");
                 setVisible(false);
-                new MainFrame();
+//                new HistoryFrame();
             }
         });
+
 
         JButton b3 = new JButton("次");
         p3.add(b1);
@@ -75,27 +89,12 @@ public class ListFrame extends JFrame {
 
         p.add(p3);
 
-        JPanel p4 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton b4 = new JButton("テスト中断");
-        b4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int result = JOptionPane.showConfirmDialog(null, "中断します。よろしいですか？", "確認" , 2);
-                if(result == YES_OPTION) {
-                    new MainFrame();
-                }
-            }
-        });
-        p4.add(b4);
-
-        p.add(p4);
-
 
         add(p);
         setVisible(true);
     }
 
     public static void main(String[] args) {
-        new ListFrame();
+        new AnswerListFrame();
     }
 }
