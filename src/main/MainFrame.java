@@ -10,12 +10,11 @@ public class MainFrame extends JFrame {
         setSize(300,100);
         setLocationRelativeTo(null);
 
-        setLayout(new BorderLayout());
 
+        JPanel p = new JPanel(new GridLayout(2,1));
         JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel l1 = new JLabel("キムジョンファさん");
         p1.add(l1);
-        add(p1, BorderLayout.NORTH);
 
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel l2 = new JLabel("進捗率(2/5) : 40%");
@@ -26,7 +25,10 @@ public class MainFrame extends JFrame {
         p2.add(b1);
         p2.add(b2);
 
-        add(p2);
+        p.add(p1);
+        p.add(p2);
+        add(p);
+
 
         setVisible(true);
     }
