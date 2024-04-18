@@ -1,9 +1,13 @@
 package main;
 
+import list.AnswerListFrame;
+import list.ListFrame;
 import login.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
 
@@ -23,7 +27,21 @@ public class MainFrame extends JFrame {
         p2.add(l2);
 
         JButton b1 = new JButton("問題リスト");
+        b1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                new ListFrame();
+            }
+        });
         JButton b2 = new JButton("履歴");
+        b2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setEnabled(false);
+                new AnswerListFrame(MainFrame.this);
+            }
+        });
         p2.add(b1);
         p2.add(b2);
 
@@ -33,9 +51,5 @@ public class MainFrame extends JFrame {
 
 
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        new MainFrame();
     }
 }

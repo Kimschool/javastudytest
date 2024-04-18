@@ -45,4 +45,20 @@ public class DbConn {
         }
     }
 
+    public ResultSet getQuestionList() {
+
+        Connection conn = getConn();
+
+        try {
+            String sql = "SELECT * FROM question where category=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, "0");
+            ResultSet rs = ps.executeQuery();
+
+            return rs;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

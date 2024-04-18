@@ -7,11 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static javax.swing.JOptionPane.YES_OPTION;
-
 public class AnswerListFrame extends JFrame {
 
-    public AnswerListFrame() {
+    public AnswerListFrame(MainFrame mainFrame) {
         JPanel p = new JPanel(new GridLayout(3,1));
 
         JPanel p1 = new JPanel();
@@ -77,7 +75,8 @@ public class AnswerListFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-//                new HistoryFrame();
+                mainFrame.setEnabled(true);
+                mainFrame.toFront();
             }
         });
 
@@ -94,7 +93,4 @@ public class AnswerListFrame extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new AnswerListFrame();
-    }
 }

@@ -1,11 +1,14 @@
 package list;
 
 import main.MainFrame;
+import util.DbConn;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
@@ -15,17 +18,27 @@ public class ListFrame extends JFrame {
         JPanel p = new JPanel(new GridLayout(4,1));
 
         JPanel p1 = new JPanel();
+
+        DbConn dbConn = new DbConn();
+        ResultSet rs = dbConn.getQuestionList();
+        String content = "";
+        String selection = "";
+
+        try {
+            while (rs.next()) {
+                content = rs.getString("content");
+                selection = rs.getString("selection");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("");
+        }
+
+
+
         JTextArea t1 = new JTextArea(10,30);
-        t1.append("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("1aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("2aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("3aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("4aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("5aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("6aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("7aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("8aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
-        t1.append("9aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n");
+        t1.append(content);
+
         JScrollPane scrollPane = new JScrollPane(t1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         p1.add(scrollPane);
         p.add(p1);
@@ -35,23 +48,23 @@ public class ListFrame extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        String[] a = selection.split(",");
         // 選択肢数
-        JRadioButton[] radio = new JRadioButton[4];
-        radio[0] = new JRadioButton("aaa");
-        radio[1] = new JRadioButton("bbb");
-        radio[2] = new JRadioButton("ccc");
-        radio[3] = new JRadioButton("ddd");
+        JRadioButton[] radio = new JRadioButton[a.length];
+        for(int i=0; i < a.length; i++) {
+            radio[i] = new JRadioButton(a[i]);
+        }
 
         ButtonGroup bg = new ButtonGroup();
-        bg.add(radio[0]);
-        bg.add(radio[1]);
-        bg.add(radio[2]);
-        bg.add(radio[3]);
+        for(int i=0; i < a.length; i++) {
+            bg.add(radio[i]);
+        }
 
-        p2.add(radio[0]);
-        p2.add(radio[1]);
-        p2.add(radio[2]);
-        p2.add(radio[3]);
+        for(int i=0; i < a.length; i++) {
+            p2.add(radio[i]);
+        }
+
         p.add(p2);
 
         JPanel p3 = new JPanel(new GridLayout(1,3));
