@@ -1,11 +1,12 @@
 package util;
 
+import login.LoginFrame;
+
 import java.sql.*;
 
 public class DbConn {
 
-    public static void main(String[] args) {
-
+    private Connection getConn() {
 
         String url = "jdbc:mysql://localhost:3306/weavus";
         String user = "root";
@@ -14,25 +15,34 @@ public class DbConn {
         // MySQL 데이터베이스 연결
         Connection conn;
 
-        {
-            try {
-                conn = DriverManager.getConnection(url, user, password);
-
-                Statement stmt = conn.createStatement();
-                // 쿼리 실행
-                String sql = "SELECT * FROM userinfo1";
-                ResultSet rs = stmt.executeQuery(sql);
-
-                // 결과 출력
-                while (rs.next()) {
-                    System.out.println(rs.getString("id") + " " + rs.getString("name"));
-                }
-
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+            return conn;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
+    public boolean login(String id, String pw) {
+
+        Connection conn = getConn();
+
+        try {
+            String sql = "SELECT * FROM userinfo1 where id=? and pw=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,id);
+            ps.setString(2,pw);
+            ResultSet rs = ps.executeQuery();
+
+            boolean result = rs.next();
+            if(result) {
+                LoginFrame.userId = rs.getString("id");
+            }
+
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

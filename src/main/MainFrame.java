@@ -1,5 +1,7 @@
 package main;
 
+import login.LoginFrame;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +15,7 @@ public class MainFrame extends JFrame {
 
         JPanel p = new JPanel(new GridLayout(2,1));
         JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JLabel l1 = new JLabel("キムジョンファさん");
+        JLabel l1 = new JLabel(LoginFrame.userId + "さん");
         p1.add(l1);
 
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.CENTER));

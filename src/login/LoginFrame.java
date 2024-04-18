@@ -1,6 +1,7 @@
 package login;
 
 import main.MainFrame;
+import util.DbConn;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame {
+
+    public static String userId;
 
     public LoginFrame() {
         setTitle("楽しいJAVA-LOGIN");
@@ -35,7 +38,10 @@ public class LoginFrame extends JFrame {
                 char[] pwArray = t2.getPassword();
                 String pw = new String(pwArray);  // char[]를 String으로 변환
 
-                if(id.equals("admin") && pw.equals("123")) {
+                DbConn dbConn = new DbConn();
+                boolean login_success = dbConn.login(id, pw);
+
+                if(login_success) {
                     JOptionPane.showMessageDialog(null, "success");
                     setVisible(false);
                     new MainFrame();
