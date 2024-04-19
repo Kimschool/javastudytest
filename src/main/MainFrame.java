@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new ListFrame();
+                new ListFrame(0);
             }
         });
         JButton b2 = new JButton("履歴");

@@ -1,77 +1,88 @@
 package list;
 
+import dao.UserInfoDao;
+import dto.QuestionDto;
 import main.MainFrame;
-import util.DbConn;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
 public class ListFrame extends JFrame {
+    JButton b2 = new JButton("提出");
 
-    public ListFrame() {
+    public ListFrame(int index) {
+        b2.setEnabled(false);
         JPanel p = new JPanel(new GridLayout(4,1));
 
         JPanel p1 = new JPanel();
 
-        DbConn dbConn = new DbConn();
-        ResultSet rs = dbConn.getQuestionList();
-        String content = "";
-        String selection = "";
+        UserInfoDao userInfoDao = new UserInfoDao();
 
-        try {
-            while (rs.next()) {
-                content = rs.getString("content");
-                selection = rs.getString("selection");
-            }
-
-        } catch (SQLException e) {
-            System.out.println("");
-        }
-
-
+        List<QuestionDto> questionDtoList = userInfoDao.getQuestionList();
 
         JTextArea t1 = new JTextArea(10,30);
-        t1.append(content);
+        t1.append(questionDtoList.get(index).getContent());
 
         JScrollPane scrollPane = new JScrollPane(t1, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         p1.add(scrollPane);
         p.add(p1);
 
-        setTitle("楽しいJAVA-LIST(1/10)");
+        int size = questionDtoList.size();
+
+        setTitle("楽しいJAVA-LIST(" + (index+1) + "/" + size + ")");
         setSize(400,500);
         setLocationRelativeTo(null);
 
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        String[] a = selection.split(",");
+        String[] selectionArr = questionDtoList.get(index).getSelection().split(",");
         // 選択肢数
-        JRadioButton[] radio = new JRadioButton[a.length];
-        for(int i=0; i < a.length; i++) {
-            radio[i] = new JRadioButton(a[i]);
+        JRadioButton[] radioArr = new JRadioButton[selectionArr.length];
+        for(int i=0; i < selectionArr.length; i++) {
+            radioArr[i] = new JRadioButton(selectionArr[i]);
+            radioArr[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(index == questionDtoList.size()-1) {
+                        b2.setEnabled(true);
+                    }
+                }
+            });
         }
 
         ButtonGroup bg = new ButtonGroup();
-        for(int i=0; i < a.length; i++) {
-            bg.add(radio[i]);
+        for(int i=0; i < selectionArr.length; i++) {
+            bg.add(radioArr[i]);
         }
 
-        for(int i=0; i < a.length; i++) {
-            p2.add(radio[i]);
+        for(int i=0; i < selectionArr.length; i++) {
+            p2.add(radioArr[i]);
         }
 
         p.add(p2);
 
         JPanel p3 = new JPanel(new GridLayout(1,3));
         JButton b1 = new JButton("前");
-        b1.setEnabled(false);
-        JButton b2 = new JButton("提出");
-//        b2.setEnabled(false);
+        b1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                new ListFrame(index -1);
+            }
+        });
+        // 見てるidx 0であれば、非活性
+        if(index == 0) {
+            b1.setEnabled(false);
+        } else {
+            b1.setEnabled(true);
+        }
+
+
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,7 +92,20 @@ public class ListFrame extends JFrame {
             }
         });
 
+        // 見てるidxが最後であれば、非活性
         JButton b3 = new JButton("次");
+        b3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                new ListFrame(index + 1);
+            }
+        });
+        if(index == questionDtoList.size()-1) {
+            b3.setEnabled(false);
+        } else {
+            b3.setEnabled(true);
+        }
         p3.add(b1);
         p3.add(b2);
         p3.add(b3);
@@ -95,6 +119,7 @@ public class ListFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int result = JOptionPane.showConfirmDialog(null, "中断します。よろしいですか？", "確認" , 2);
                 if(result == YES_OPTION) {
+                    setVisible(false);
                     new MainFrame();
                 }
             }
@@ -109,6 +134,6 @@ public class ListFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        new ListFrame();
+        new ListFrame(1);
     }
 }

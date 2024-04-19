@@ -1,5 +1,6 @@
 package login;
 
+import dao.UserInfoDao;
 import main.MainFrame;
 import util.DbConn;
 
@@ -38,8 +39,8 @@ public class LoginFrame extends JFrame {
                 char[] pwArray = t2.getPassword();
                 String pw = new String(pwArray);  // char[]를 String으로 변환
 
-                DbConn dbConn = new DbConn();
-                boolean login_success = dbConn.login(id, pw);
+                UserInfoDao userInfoDao = new UserInfoDao();
+                boolean login_success = userInfoDao.login(id, pw);
 
                 if(login_success) {
                     JOptionPane.showMessageDialog(null, "success");
