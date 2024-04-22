@@ -1,4 +1,4 @@
-package list;
+package question;
 
 import main.MainFrame;
 
@@ -7,9 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AnswerListFrame extends JFrame {
+public class AnswerFrame extends JFrame {
 
-    public AnswerListFrame(MainFrame mainFrame) {
+    public AnswerFrame(int index, int category) {
         JPanel p = new JPanel(new GridLayout(3,1));
 
         JPanel p1 = new JPanel();
@@ -75,8 +75,8 @@ public class AnswerListFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                mainFrame.setEnabled(true);
-                mainFrame.toFront();
+//                mainFrame.setEnabled(true);
+//                mainFrame.toFront();
             }
         });
 

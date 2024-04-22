@@ -1,7 +1,8 @@
-package list;
+package question;
 
-import dao.UserInfoDao;
+import dao.QuestionDao;
 import dto.QuestionDto;
+import list.CategoryListFrame;
 import main.MainFrame;
 
 import javax.swing.*;
@@ -12,18 +13,25 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.YES_OPTION;
 
-public class ListFrame extends JFrame {
+public class QuestionFrame extends JFrame {
     JButton b2 = new JButton("提出");
 
-    public ListFrame(int index) {
+    public QuestionFrame(int index, int category) {
         b2.setEnabled(false);
         JPanel p = new JPanel(new GridLayout(4,1));
 
         JPanel p1 = new JPanel();
 
-        UserInfoDao userInfoDao = new UserInfoDao();
+        QuestionDao questionDao = new QuestionDao();
 
-        List<QuestionDto> questionDtoList = userInfoDao.getQuestionList();
+        List<QuestionDto> questionDtoList = questionDao.getQuestionList(category);
+
+        if(questionDtoList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "問題がない！！");
+            setVisible(false);
+            new CategoryListFrame(0);
+            return;
+        }
 
         JTextArea t1 = new JTextArea(10,30);
         t1.append(questionDtoList.get(index).getContent());
@@ -72,7 +80,7 @@ public class ListFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new ListFrame(index -1);
+                new QuestionFrame(index -1, category);
             }
         });
         // 見てるidx 0であれば、非活性
@@ -98,7 +106,7 @@ public class ListFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new ListFrame(index + 1);
+                new QuestionFrame(index + 1, category);
             }
         });
         if(index == questionDtoList.size()-1) {
@@ -120,7 +128,7 @@ public class ListFrame extends JFrame {
                 int result = JOptionPane.showConfirmDialog(null, "中断します。よろしいですか？", "確認" , 2);
                 if(result == YES_OPTION) {
                     setVisible(false);
-                    new MainFrame();
+                    new CategoryListFrame(0);
                 }
             }
         });
@@ -133,7 +141,4 @@ public class ListFrame extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new ListFrame(1);
-    }
 }

@@ -1,7 +1,8 @@
 package main;
 
-import list.AnswerListFrame;
-import list.ListFrame;
+import list.CategoryListFrame;
+import question.AnswerFrame;
+import question.QuestionFrame;
 import login.LoginFrame;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                new ListFrame(0);
+                new CategoryListFrame(0);
             }
         });
         JButton b2 = new JButton("履歴");
@@ -39,7 +40,7 @@ public class MainFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setEnabled(false);
-                new AnswerListFrame(MainFrame.this);
+                new CategoryListFrame(1);
             }
         });
         p2.add(b1);
