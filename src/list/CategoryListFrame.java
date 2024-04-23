@@ -18,8 +18,6 @@ import java.util.List;
 public class CategoryListFrame extends JFrame {
 
     static final int QUESTION_BUTTON = 0;
-    static final int HISTORY_BUTTON = 1;
-
 
     public CategoryListFrame(int buttonType) {
 
@@ -58,8 +56,7 @@ public class CategoryListFrame extends JFrame {
                     if(buttonType == QUESTION_BUTTON) {
                         new QuestionFrame(0, id);
                     } else {
-//                        new AnswerFrame(0);
-
+                        new AnswerFrame(0, id);
                     }
                 }
             });

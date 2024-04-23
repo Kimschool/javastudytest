@@ -1,16 +1,22 @@
 package main;
 
 import list.CategoryListFrame;
-import question.AnswerFrame;
-import question.QuestionFrame;
 import login.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainFrame extends JFrame {
+
+    public static Map<Integer, Integer> myAnswerMap = new HashMap<>();
+    public static Map<Integer, Integer> dbAnswerMap = new HashMap<>();
+
+    public static int count = 1;
+
 
     public MainFrame() {
         setTitle("楽しいJAVA-MAIN");
@@ -24,7 +30,10 @@ public class MainFrame extends JFrame {
         p1.add(l1);
 
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JLabel l2 = new JLabel("進捗率(2/5) : 40%");
+
+        float a = myAnswerMap.size();
+        JLabel l2 = new JLabel("進捗率" + a/count*100 + "%");
+        System.out.println(a/count*100);
         p2.add(l2);
 
         JButton b1 = new JButton("問題リスト");
@@ -39,7 +48,7 @@ public class MainFrame extends JFrame {
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setEnabled(false);
+                setVisible(false);
                 new CategoryListFrame(1);
             }
         });

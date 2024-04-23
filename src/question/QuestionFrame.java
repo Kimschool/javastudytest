@@ -14,10 +14,16 @@ import java.util.List;
 import static javax.swing.JOptionPane.YES_OPTION;
 
 public class QuestionFrame extends JFrame {
+    JButton b1 = new JButton("前");
     JButton b2 = new JButton("提出");
+    JButton b3 = new JButton("次");
+
 
     public QuestionFrame(int index, int category) {
+        b1.setEnabled(false);
         b2.setEnabled(false);
+        b3.setEnabled(false);
+
         JPanel p = new JPanel(new GridLayout(4,1));
 
         JPanel p1 = new JPanel();
@@ -32,6 +38,7 @@ public class QuestionFrame extends JFrame {
             new CategoryListFrame(0);
             return;
         }
+
 
         JTextArea t1 = new JTextArea(10,30);
         t1.append(questionDtoList.get(index).getContent());
@@ -53,11 +60,21 @@ public class QuestionFrame extends JFrame {
         JRadioButton[] radioArr = new JRadioButton[selectionArr.length];
         for(int i=0; i < selectionArr.length; i++) {
             radioArr[i] = new JRadioButton(selectionArr[i]);
+            int selected = i;
             radioArr[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    MainFrame.myAnswerMap.put(questionDtoList.get(index).getNo(), selected);
+
                     if(index == questionDtoList.size()-1) {
+                        b1.setEnabled(true);
                         b2.setEnabled(true);
+                    } else if(index == 0) {
+                        b3.setEnabled(true);
+                    } else {
+                        b1.setEnabled(true);
+                        b3.setEnabled(true);
                     }
                 }
             });
@@ -75,7 +92,7 @@ public class QuestionFrame extends JFrame {
         p.add(p2);
 
         JPanel p3 = new JPanel(new GridLayout(1,3));
-        JButton b1 = new JButton("前");
+
         b1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,17 +100,28 @@ public class QuestionFrame extends JFrame {
                 new QuestionFrame(index -1, category);
             }
         });
-        // 見てるidx 0であれば、非活性
-        if(index == 0) {
-            b1.setEnabled(false);
-        } else {
-            b1.setEnabled(true);
-        }
-
 
         b2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                for(QuestionDto questionDto : questionDtoList) {
+                    MainFrame.dbAnswerMap.put(questionDto.getNo(), questionDto.getAnswer());
+                }
+
+                for(int no : MainFrame.dbAnswerMap.keySet()) {
+                    int correction = MainFrame.dbAnswerMap.get(no);
+                    int selection = MainFrame.myAnswerMap.get(no);
+
+                    if(correction == selection) {
+                        System.out.printf("正解");
+                    } else {
+                        System.out.printf("誤答　NO:%d, CORRECTION:%d, SELCTION:%d", no, correction, selection);
+                    }
+
+
+                }
+
                 JOptionPane.showMessageDialog(null, "お疲れ様です。メイン画面に戻ります。");
                 setVisible(false);
                 new MainFrame();
@@ -101,7 +129,6 @@ public class QuestionFrame extends JFrame {
         });
 
         // 見てるidxが最後であれば、非活性
-        JButton b3 = new JButton("次");
         b3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -109,11 +136,6 @@ public class QuestionFrame extends JFrame {
                 new QuestionFrame(index + 1, category);
             }
         });
-        if(index == questionDtoList.size()-1) {
-            b3.setEnabled(false);
-        } else {
-            b3.setEnabled(true);
-        }
         p3.add(b1);
         p3.add(b2);
         p3.add(b3);
@@ -126,6 +148,7 @@ public class QuestionFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int result = JOptionPane.showConfirmDialog(null, "中断します。よろしいですか？", "確認" , 2);
+                MainFrame.count = questionDtoList.size();
                 if(result == YES_OPTION) {
                     setVisible(false);
                     new CategoryListFrame(0);

@@ -32,6 +32,9 @@ public class QuestionDao {
                 questionDto.setContent(rs.getString("content"));
                 questionDto.setSelection(rs.getString("selection"));
                 questionDto.setCategory(rs.getInt("category"));
+                questionDto.setAnswer(rs.getInt("answer"));
+                questionDto.setParticipantCount(rs.getInt("participant_count"));
+                questionDto.setCorrectionCount(rs.getInt("correction_count"));
 
                 questionDtoList.add(questionDto);
             }

@@ -10,6 +10,12 @@ public class QuestionDto {
 
     private int category;
 
+    private int answer;
+
+    private int participantCount;
+
+    private int correctionCount;
+
     public int getNo() {
         return no;
     }
@@ -40,5 +46,29 @@ public class QuestionDto {
 
     public void setCategory(int category) {
         this.category = category;
+    }
+
+    public int getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(int answer) {
+        this.answer = answer;
+    }
+
+    public int getParticipantCount() {
+        return participantCount;
+    }
+
+    public void setParticipantCount(int participantCount) {
+        this.participantCount = participantCount;
+    }
+
+    public int getCorrectionCount() {
+        return correctionCount;
+    }
+
+    public void setCorrectionCount(int correctionCount) {
+        this.correctionCount = correctionCount;
     }
 }
