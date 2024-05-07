@@ -1,9 +1,11 @@
 package question;
 
 import dao.QuestionDao;
+import dao.TestHistoryDao;
 import dto.QuestionDto;
+import dto.TestHistoryDto;
 import list.CategoryListFrame;
-import main.MainFrame;
+import login.LoginFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,21 +29,23 @@ public class AnswerFrame extends JFrame {
             return;
         }
 
+        TestHistoryDao testHistoryDao = new TestHistoryDao();
+
+
+
         JPanel mainPanel = new JPanel(new GridLayout(2,1));
 
         JPanel topPanel = new JPanel(new BorderLayout());
 
         JPanel correctionRatePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        int participantCount = questionDtoList.get(index).getParticipantCount();
-        int correctionCount = questionDtoList.get(index).getCorrectionCount();
-        int rate = (correctionCount/participantCount) * 100;
+        float participantCount = questionDtoList.get(index).getParticipantCount();
+        float correctionCount = questionDtoList.get(index).getCorrectionCount();
+        float rate = (correctionCount/participantCount) * 100;
 
-        JLabel correctionRateLabel = new JLabel(rate + "%");
+        JLabel correctionRateLabel = new JLabel("正答率　：　" + Math.floor(rate) + "%");
         correctionRatePanel.add(correctionRateLabel);
         topPanel.add(correctionRatePanel, BorderLayout.NORTH);
-
-
 
 
         JTextArea t1 = new JTextArea(10,30);
@@ -65,11 +69,18 @@ public class AnswerFrame extends JFrame {
         JPanel p2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         String[] selectionArr = questionDtoList.get(index).getSelection().split(",");
+
+        TestHistoryDto testHistoryDto = testHistoryDao.getTestHistory(questionDtoList.get(index).getNo(), LoginFrame.userId);
+
         // 選択肢数
         JRadioButton[] radioArr = new JRadioButton[selectionArr.length];
         for(int i=0; i < selectionArr.length; i++) {
             radioArr[i] = new JRadioButton(selectionArr[i]);
             radioArr[i].setEnabled(false);
+            if(i == testHistoryDto.getSelection()) {
+                radioArr[i].setSelected(true);
+            }
+
             radioArr[i].addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

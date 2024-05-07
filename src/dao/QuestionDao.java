@@ -13,9 +13,9 @@ import static util.DbConn.getConn;
 
 public class QuestionDao {
 
-    public List<QuestionDto> getQuestionList(int category) {
+    Connection conn = getConn();
 
-        Connection conn = getConn();
+    public List<QuestionDto> getQuestionList(int category) {
 
         try {
             String sql = "SELECT * FROM question where category=?";
@@ -44,4 +44,24 @@ public class QuestionDao {
             throw new RuntimeException(e);
         }
     }
-}
+
+    public void updateQuestion(int questionNo, boolean correct) {
+
+        try {
+            StringBuilder sql = new StringBuilder();
+
+            sql.append("UPDATE question SET participant_count = participant_count + 1");
+            if (correct) {
+                sql.append(", correction_count = correction_count + 1");
+            }
+            sql.append(" where no = ?");
+
+            PreparedStatement ps = conn.prepareStatement(String.valueOf(sql));
+            ps.setInt(1, questionNo);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    }

@@ -1,8 +1,11 @@
 package question;
 
 import dao.QuestionDao;
+import dao.TestHistoryDao;
 import dto.QuestionDto;
+import dto.TestHistoryDto;
 import list.CategoryListFrame;
+import login.LoginFrame;
 import main.MainFrame;
 
 import javax.swing.*;
@@ -113,15 +116,28 @@ public class QuestionFrame extends JFrame {
                     int correction = MainFrame.dbAnswerMap.get(no);
                     int selection = MainFrame.myAnswerMap.get(no);
 
+                    TestHistoryDao testHistoryDao = new TestHistoryDao();
+                    TestHistoryDto testHistoryDto = new TestHistoryDto();
+                    testHistoryDto.setUserId(LoginFrame.userId);
+                    testHistoryDto.setCategory(category);
+                    testHistoryDto.setQuestionNo(no);
+                    testHistoryDto.setSelection(selection);
+                    testHistoryDao.saveTestHistory(testHistoryDto);
+
                     if(correction == selection) {
                         System.out.printf("正解");
+
+                        questionDao.updateQuestion(no, true);
+
                     } else {
                         System.out.printf("誤答　NO:%d, CORRECTION:%d, SELCTION:%d", no, correction, selection);
+
+                        questionDao.updateQuestion(no, false);
                     }
 
 
                 }
-
+                MainFrame.count = questionDtoList.size();
                 JOptionPane.showMessageDialog(null, "お疲れ様です。メイン画面に戻ります。");
                 setVisible(false);
                 new MainFrame();

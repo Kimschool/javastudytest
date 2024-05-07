@@ -1,7 +1,9 @@
 package list;
 
 import dao.CategoryDao;
+import dao.TestHistoryDao;
 import dto.CategoryDto;
+import login.LoginFrame;
 import main.MainFrame;
 import question.AnswerFrame;
 import question.QuestionFrame;
@@ -52,11 +54,18 @@ public class CategoryListFrame extends JFrame {
             titleArr[i].addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    setVisible(false);
-                    if(buttonType == QUESTION_BUTTON) {
-                        new QuestionFrame(0, id);
+                    TestHistoryDao testHistoryDao = new TestHistoryDao();
+                    boolean result = testHistoryDao.checkExistHistory(LoginFrame.userId, id);
+                    if(result && buttonType == QUESTION_BUTTON) {
+                        JOptionPane.showMessageDialog(null, "既に提出済み");
                     } else {
-                        new AnswerFrame(0, id);
+                        setVisible(false);
+
+                        if(buttonType == QUESTION_BUTTON) {
+                            new QuestionFrame(0, id);
+                        } else {
+                            new AnswerFrame(0, id);
+                        }
                     }
                 }
             });
